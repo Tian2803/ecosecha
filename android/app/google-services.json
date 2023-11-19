@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "579187072470",
+    "project_id": "ecosecha-b539c",
+    "storage_bucket": "ecosecha-b539c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579187072470:android:a0a8b19435ff1e853ad877",
+        "android_client_info": {
+          "package_name": "com.example.ecosecha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhbzfCl7nEhp_jNCCyCWoYLFH7Ibv6DkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
