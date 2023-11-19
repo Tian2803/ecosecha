@@ -231,7 +231,7 @@ class _ItemPageState extends State<ItemPage> {
                 onPressed: () {
                   // Add logic to add the order
                 },
-                child: const Text('Agregar'),
+                child: const Text('Pagar'),
               ),
             ],
           ),

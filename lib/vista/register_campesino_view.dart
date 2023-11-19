@@ -32,7 +32,7 @@ class _RegisterCampesinoViewState extends State<RegisterCampesinoView> {
     child: const Align(
       alignment: Alignment.centerLeft, // Alineación izquierda
       child: Text(
-        "Hola, Bienvenido al registro de Notify Hogar.",
+        "Bienvenido al registro de campesinos de Ecosecha.",
         textAlign: TextAlign.justify,
         style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
       ),

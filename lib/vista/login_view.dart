@@ -1,4 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'package:ecosecha/vista/register_campesino_view.dart';
 import 'package:ecosecha/vista/register_user_view.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class LoginView extends StatelessWidget {
         image: DecorationImage(
             fit: BoxFit.cover, image: AssetImage("images/ecosecha_logo.png"))),
   );
-  
+
   final comment = const Text(
     "Bienvenido a Ecosecha",
     textAlign: TextAlign.justify,
@@ -104,6 +105,31 @@ class LoginView extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .center, // Alineación de los botones y espacio entre ellos
+              children: <Widget>[
+                const Text("Si eres un campesino presiona "),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const RegisterCampesinoView()));
+                  },
+                  child: const Text(
+                    "aqui",
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
         ),
       ),
