@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:ecosecha/controlador/controller_auxiliar.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:raised_buttons/raised_buttons.dart';
@@ -16,10 +17,8 @@ class FoodRegisterView extends StatefulWidget {
 
 class _FoodRegisterViewState extends State<FoodRegisterView> {
   final TextEditingController productoController = TextEditingController();
-  final TextEditingController cantidadController =
-      TextEditingController();
-  final TextEditingController descripcionController=
-      TextEditingController();
+  final TextEditingController cantidadController = TextEditingController();
+  final TextEditingController descripcionController = TextEditingController();
   final TextEditingController precioController = TextEditingController();
 
   String productoId = generateId();
@@ -196,14 +195,22 @@ class _PhotoUploadState extends State<PhotoUpload> {
             )));
   }
 
-  void validateAndSave() {
+  bool validateAndSave() {
     final form = formkey.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // Realiza acciones adicionales después de guardar el formulario si es necesario
-        print("Formulario válido, realiza acciones de guardado aquí");
-      }
+    if (form!.validate()) {
+      form.save();
+      print("Formulario válido, realiza acciones de guardado aquí");
+      return true;
+    } else {
+      return false;
     }
   }
+
+  /*void uploadStatusImage() async {
+    if (validateAndSave()) {
+      final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Post images");
+      var timekey = DateTime.now();
+
+    }
+  }*/
 }
