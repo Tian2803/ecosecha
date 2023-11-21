@@ -4,7 +4,7 @@ import 'package:ecosecha/controlador/campesino_controller.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/controlador/login_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
-import 'package:ecosecha/vista/producto_register_view.dart';
+import 'package:ecosecha/vista/image_load_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -198,7 +198,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const FoodRegisterView()),
+                builder: (context) => const PhotoUpload()),
           );
           setState(() {});
         },

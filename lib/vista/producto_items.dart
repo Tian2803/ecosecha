@@ -60,11 +60,12 @@ class ProductoItems extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Image.asset(
-                                    "assets/images/fondo.png",
+                                  child: Image.network(
+                                    productos[i].imageUrl,
                                     height: 120,
                                     width: 150,
                                   ),
+                                  
                                 ),
                               ),
                               const SizedBox(width: 16.0),

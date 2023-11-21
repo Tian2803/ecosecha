@@ -7,39 +7,41 @@ import 'package:ecosecha/logica/producto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-//Detalles vista campesino
+//Detalles vista campesino => en uso
 Future<List<Producto>> getProductoDetails(String userId) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   try {
     // Realiza la consulta a Firebase Firestore
     QuerySnapshot snapshot = await firestore
-        .collection('producto')
+        .collection('productos')
         .where('user', isEqualTo: userId)
         .get();
 
-    // Inicializa una lista para almacenar los electrodomésticos
-    List<Producto> producto = [];
-    // Recorre los documentos y crea instancias de la clase Appliance
+    // Inicializa una lista para almacenar los productos
+    List<Producto> productos = [];
+    // Recorre los documentos y crea instancias de la clase Producto
     for (var doc in snapshot.docs) {
-      producto.add(Producto(
+      productos.add(Producto(
         id: doc['id'],
         producto: doc['producto'],
         cantidad: doc['cantidad'],
         descripcion: doc['descripcion'],
         precio: doc['precio'],
         user: doc['user'],
+        imageUrl: doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
       ));
     }
 
-    // Devuelve la lista de alimentos
-    return producto;
+    // Devuelve la lista de productos
+    return productos;
   } catch (e) {
     // Maneja errores de forma adecuada
     throw Exception(
-        'No se pudo obtener la información de las comidas.');
+        'No se pudo obtener la información de los productos.');
   }
 }
+
 
 void updateFood(Producto producto) {
   // Obtén una referencia al documento del producto en Firestore
@@ -66,13 +68,16 @@ void deleteProducto(Producto producto) {
   });
 }
 
+//En uso
 void registerProducto(
-    BuildContext context,
-    String producto,
-    String cantidad,
-    String descripcion,
-    String precio,
-    String productoId) async {
+  BuildContext context,
+  String producto,
+  String cantidad,
+  String descripcion,
+  String precio,
+  String productoId,
+  String imageUrl, // Include imageUrl parameter
+) async {
   try {
     if (producto.isEmpty ||
         cantidad.isEmpty ||
@@ -92,10 +97,11 @@ void registerProducto(
       descripcion: descripcion,
       precio: precio,
       user: uid,
+      imageUrl: imageUrl, // Pass imageUrl to the constructor
     );
 
     await FirebaseFirestore.instance
-        .collection('producto')
+        .collection('productos')
         .doc(productoId)
         .set(product.toJson());
   } catch (e) {
@@ -105,7 +111,7 @@ void registerProducto(
   }
 }
 
-Future<String> getFoodId(String nameFood, String userId) async {
+/*Future<String> getFoodId(String nameFood, String userId) async {
   try {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('electrodomestico')
@@ -120,12 +126,13 @@ Future<String> getFoodId(String nameFood, String userId) async {
     throw Exception(
         'No se pudo obtener el identificador de la comida.');
   }
-}
+}*/
 
+//En uso
 Future<Producto> getProducto(String productoId) async {
   try {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('producto')
+        .collection('productos')
         .where('id', isEqualTo: productoId)
         .get();
 
@@ -139,6 +146,7 @@ Future<Producto> getProducto(String productoId) async {
         descripcion: data['descripcion'],
         precio: data['precio'],
         user: data['user'],
+        imageUrl: data['imageUrl'], // Include imageUrl in the instantiation
       );
 
       return producto;
@@ -151,34 +159,34 @@ Future<Producto> getProducto(String productoId) async {
   }
 }
 
+//En uso
 Future<List<Producto>> getProductosDetails() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   try {
     // Realiza la consulta a Firebase Firestore
-    QuerySnapshot snapshot = await firestore
-        .collection('producto')
-        .get();
+    QuerySnapshot snapshot = await firestore.collection('productos').get();
 
-    // Inicializa una lista para almacenar los electrodomésticos
-    List<Producto> producto = [];
-    // Recorre los documentos y crea instancias de la clase Appliance
+    // Inicializa una lista para almacenar los productos
+    List<Producto> productos = [];
+    // Recorre los documentos y crea instancias de la clase Producto
     for (var doc in snapshot.docs) {
-      producto.add(Producto(
+      productos.add(Producto(
         id: doc['id'],
         producto: doc['producto'],
         cantidad: doc['cantidad'],
         descripcion: doc['descripcion'],
         precio: doc['precio'],
         user: doc['user'],
+        imageUrl: doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
       ));
     }
 
-    // Devuelve la lista de alimentos
-    return producto;
+    // Devuelve la lista de productos
+    return productos;
   } catch (e) {
     // Maneja errores de forma adecuada
     throw Exception(
-        'No se pudo obtener la información de las comidas.');
+        'No se pudo obtener la información de los productos.');
   }
 }

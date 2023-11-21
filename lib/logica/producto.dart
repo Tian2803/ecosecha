@@ -5,6 +5,7 @@ class Producto {
   final String descripcion;
   final String precio;
   final String user;
+  final String imageUrl; // Add imageUrl attribute
 
   Producto({
     required this.id,
@@ -13,6 +14,7 @@ class Producto {
     required this.descripcion,
     required this.precio,
     required this.user,
+    required this.imageUrl, // Include imageUrl in the constructor
   });
 
   Producto.defaultConstructor()
@@ -21,7 +23,8 @@ class Producto {
         cantidad = '0',
         descripcion = 'none',
         precio = '0',
-        user = 'none';
+        user = 'none',
+        imageUrl = 'https://firebasestorage.googleapis.com/v0/b/ecosecha-b539c.appspot.com/o/images%2Fe9954f18-563a-452c-b339-56248b0bfd1c_1700535204098.jpg?alt=media&token=da1967a5-1167-4219-985f-11995a34f9e0'; // Set a default value for imageUrl
 
   factory Producto.fromJson(Map<String, dynamic> json) {
     return Producto(
@@ -30,7 +33,8 @@ class Producto {
       cantidad: json['cantidad'],
       descripcion: json['descripcion'],
       precio: json['precio'],
-      user: json['user']
+      user: json['user'],
+      imageUrl: json['imageUrl'], // Retrieve imageUrl from the JSON
     );
   }
 
@@ -40,6 +44,7 @@ class Producto {
         'cantidad': cantidad,
         'descripcion': descripcion,
         'precio': precio,
-        'user':user,
+        'user': user,
+        'imageUrl': imageUrl, // Include imageUrl in the JSON
       };
 }

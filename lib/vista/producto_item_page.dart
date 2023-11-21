@@ -43,6 +43,8 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
+      appBar: AppBar(
+        title: const Text('Detalles del Producto'),),
       body: producto != null
           ? Padding(
               padding: const EdgeInsets.only(top: 5),
@@ -50,8 +52,7 @@ class _ItemPageState extends State<ItemPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Image.asset(
-                      "assets/images/fondo.png",
+                    child: Image.network(producto.imageUrl,
                       height: 300,
                       width: 100,
                     ),
