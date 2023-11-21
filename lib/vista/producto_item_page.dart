@@ -16,7 +16,7 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
-  late Producto producto; // Updated to a late variable
+  late Producto producto = Producto.defaultConstructor(); // Updated to a late variable
 
   int cantidad = 1; // Local state to track quantity
 
@@ -51,7 +51,7 @@ class _ItemPageState extends State<ItemPage> {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Image.asset(
-                      "images/fondo.png",
+                      "assets/images/fondo.png",
                       height: 300,
                       width: 100,
                     ),

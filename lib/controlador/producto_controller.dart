@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, avoid_function_literals_in_foreach_calls, use_build_context_synchronously
+
 
 //YA FUNCIONA BIEN
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +21,7 @@ Future<List<Producto>> getProductoDetails(String userId) async {
     // Inicializa una lista para almacenar los electrodomésticos
     List<Producto> producto = [];
     // Recorre los documentos y crea instancias de la clase Appliance
-    snapshot.docs.forEach((doc) {
+    for (var doc in snapshot.docs) {
       producto.add(Producto(
         id: doc['id'],
         producto: doc['producto'],
@@ -30,14 +30,12 @@ Future<List<Producto>> getProductoDetails(String userId) async {
         precio: doc['precio'],
         user: doc['user'],
       ));
-    });
+    }
 
     // Devuelve la lista de alimentos
     return producto;
   } catch (e) {
     // Maneja errores de forma adecuada
-    print(
-        'Error, no se logro obtener la información de las comidas: $e');
     throw Exception(
         'No se pudo obtener la información de las comidas.');
   }
@@ -55,9 +53,7 @@ void updateFood(Producto producto) {
     'descripcion': producto.descripcion,
     'precio': producto.precio
   }).then((_) {
-    print('Food actualizada correctamente');
   }).catchError((error) {
-    print('Error al actualizar el producto: $error');
   });
 }
 
@@ -66,13 +62,11 @@ void deleteProducto(Producto producto) {
       FirebaseFirestore.instance.collection('producto').doc(producto.id);
 
   productoRef.delete().then((doc) {
-    print("producto eliminada correctamente");
   }).catchError((error) {
-    print('Error al eliminar la producto: $error');
   });
 }
 
-void registerFood(
+void registerProducto(
     BuildContext context,
     String producto,
     String cantidad,
@@ -105,6 +99,7 @@ void registerFood(
         .doc(productoId)
         .set(product.toJson());
   } catch (e) {
+    // ignore: use_build_context_synchronously
     showPersonalizedAlert(context, 'Error al registrar la Food',
         AlertMessageType.error);
   }
@@ -119,7 +114,6 @@ Future<String> getFoodId(String nameFood, String userId) async {
         .get();
 
     final foodId = querySnapshot.docs.first.id;
-    print(foodId);
     return foodId;
     // No se encontró el electrodoméstico con el nombre proporcionado
   } catch (e) {
@@ -169,7 +163,7 @@ Future<List<Producto>> getProductosDetails() async {
     // Inicializa una lista para almacenar los electrodomésticos
     List<Producto> producto = [];
     // Recorre los documentos y crea instancias de la clase Appliance
-    snapshot.docs.forEach((doc) {
+    for (var doc in snapshot.docs) {
       producto.add(Producto(
         id: doc['id'],
         producto: doc['producto'],
@@ -178,14 +172,12 @@ Future<List<Producto>> getProductosDetails() async {
         precio: doc['precio'],
         user: doc['user'],
       ));
-    });
+    }
 
     // Devuelve la lista de alimentos
     return producto;
   } catch (e) {
     // Maneja errores de forma adecuada
-    print(
-        'Error, no se logro obtener la información de las comidas: $e');
     throw Exception(
         'No se pudo obtener la información de las comidas.');
   }

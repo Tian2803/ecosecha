@@ -61,7 +61,7 @@ class ProductoItems extends StatelessWidget {
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Image.asset(
-                                    "images/fondo.png",
+                                    "assets/images/fondo.png",
                                     height: 120,
                                     width: 150,
                                   ),

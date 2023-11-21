@@ -1,12 +1,7 @@
-// ignore_for_file: modelo_key_in_widget_constructors
-
-import 'dart:io';
 import 'package:ecosecha/controlador/controller_auxiliar.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ecosecha/vista/image_load_view.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:raised_buttons/raised_buttons.dart';
 
 class FoodRegisterView extends StatefulWidget {
   const FoodRegisterView({super.key});
@@ -111,7 +106,7 @@ class _FoodRegisterViewState extends State<FoodRegisterView> {
                 const SizedBox(height: 25.0),
                 ElevatedButton(
                   onPressed: () {
-                    registerFood(
+                    registerProducto(
                         context,
                         productoController.text,
                         cantidadController.text,
@@ -134,83 +129,4 @@ class _FoodRegisterViewState extends State<FoodRegisterView> {
       ),
     );
   }
-}
-
-class PhotoUpload extends StatefulWidget {
-  const PhotoUpload({super.key});
-
-  @override
-  _PhotoUploadState createState() => _PhotoUploadState();
-}
-
-class _PhotoUploadState extends State<PhotoUpload> {
-  late File sampleImage = File('');
-  final formkey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cargar imagen"),
-        centerTitle: true,
-      ),
-      body: Center(
-        // ignore: unnecessary_null_comparison
-        child: sampleImage == null
-            ? const Text("Saleccione una imagen")
-            : enableUpload(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: "Agregar imagen",
-        child: const Icon(Icons.add_a_photo),
-      ),
-    );
-  }
-
-  Future getImage() async {
-    var tempImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      sampleImage = tempImage as File;
-    });
-  }
-
-  Widget enableUpload() {
-    return SingleChildScrollView(
-        child: Form(
-            key: formkey,
-            child: Column(
-              children: <Widget>[
-                Image.file(
-                  sampleImage,
-                  height: 300,
-                  width: 600,
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                RaisedButtons(formkey, text: "Guardar", onPressed: () {
-                  validateAndSave();
-                }, fontSize: 18)
-              ],
-            )));
-  }
-
-  bool validateAndSave() {
-    final form = formkey.currentState;
-    if (form!.validate()) {
-      form.save();
-      print("Formulario válido, realiza acciones de guardado aquí");
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /*void uploadStatusImage() async {
-    if (validateAndSave()) {
-      final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Post images");
-      var timekey = DateTime.now();
-
-    }
-  }*/
 }

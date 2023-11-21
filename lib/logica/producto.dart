@@ -15,6 +15,14 @@ class Producto {
     required this.user,
   });
 
+  Producto.defaultConstructor()
+      : id = 'ecosecha',
+        producto = 'none',
+        cantidad = '0',
+        descripcion = 'none',
+        precio = '0',
+        user = 'none';
+
   factory Producto.fromJson(Map<String, dynamic> json) {
     return Producto(
       id: json['id'],

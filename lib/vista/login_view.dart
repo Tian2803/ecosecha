@@ -27,7 +27,7 @@ class LoginView extends StatelessWidget {
     decoration: const BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
-            fit: BoxFit.cover, image: AssetImage("images/ecosecha_logo.png"))),
+            fit: BoxFit.cover, image: AssetImage("assets/images/ecosecha_logo.png"))),
   );
 
   final comment = const Text(
