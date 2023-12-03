@@ -8,21 +8,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void registerCompany(
-    String name,
-    String telefono,
-    String email,
-    String address,
-    String password,
-    String passwordConf,
-    BuildContext context) async {
+void registerCompany(String name, String telefono, String email, String address,
+    String password, String passwordConf, BuildContext context) async {
   try {
     if (name.isEmpty ||
         telefono.isEmpty ||
         email.isEmpty ||
-            address.isEmpty ||
-            password.isEmpty ||
-            passwordConf.isEmpty) {
+        address.isEmpty ||
+        password.isEmpty ||
+        passwordConf.isEmpty) {
       showPersonalizedAlert(context, 'Por favor, complete todos los campos',
           AlertMessageType.warning);
     } else {

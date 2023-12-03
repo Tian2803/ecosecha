@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecosecha/controlador/alert_dialog.dart';
 import 'package:ecosecha/logica/producto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 
 //Detalles vista campesino => en uso
@@ -189,4 +190,29 @@ Future<List<Producto>> getProductosDetails() async {
     throw Exception(
         'No se pudo obtener la información de los productos.');
   }
+}
+
+void eliminarProducto(Producto producto) {
+  DocumentReference documentReference =
+      FirebaseFirestore.instance.collection('productos').doc(producto.id);
+
+  documentReference.delete().then((doc) {
+    print("Producto eliminado correctamente");
+    eliminarImagenProducto(producto.imageUrl);
+  }).catchError((error) {
+    print('Error al eliminar el producto: $error');
+  });
+}
+
+void eliminarImagenProducto(String nombreImagen) {
+  // Referencia al almacenamiento de Firebase
+  firebase_storage.Reference reference =
+      firebase_storage.FirebaseStorage.instance.ref().child(nombreImagen);
+
+  // Eliminar la imagen
+  reference.delete().then((_) {
+    print("Imagen eliminada correctamente");
+  }).catchError((error) {
+    print('Error al eliminar la imagen: $error');
+  });
 }

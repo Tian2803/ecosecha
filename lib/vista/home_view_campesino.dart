@@ -169,7 +169,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
-                                deleteProducto(producto);
+                                eliminarProducto(producto);
                                 setState(() {});
                               },
                             ),
