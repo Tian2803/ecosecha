@@ -23,7 +23,7 @@ class ProductoEditView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold para la vista de edición de electrodomésticos
+    // Scaffold para la vista de edición de producto
     return Scaffold(
       backgroundColor: const Color.fromARGB(248, 248, 248, 246),
       appBar: AppBar(
@@ -38,7 +38,7 @@ class ProductoEditView extends StatelessWidget {
             Expanded(
               child: ListView(children: [
                 const SizedBox(height: 5),
-                // Campo de texto para el nombre del electrodoméstico
+                // Campo de texto para el nombre del producto
                 TextFormField(
                   controller: productoController,
                   decoration: const InputDecoration(
@@ -59,7 +59,7 @@ class ProductoEditView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-                // Campo de texto para el cantidad del electrodoméstico
+                // Campo de texto para el cantidad del producto
                 TextFormField(
                   controller: cantidadController,
                   decoration: const InputDecoration(
@@ -80,7 +80,7 @@ class ProductoEditView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-                // Campo de texto para el descripcion del producto
+                // Campo de texto para la descripcion del producto
                 TextFormField(
                   controller: descripcionController,
                   decoration: const InputDecoration(
