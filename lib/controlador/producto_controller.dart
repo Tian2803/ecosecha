@@ -1,6 +1,6 @@
-
-
 //YA FUNCIONA BIEN
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecosecha/controlador/alert_dialog.dart';
 import 'package:ecosecha/logica/producto.dart';
@@ -30,7 +30,8 @@ Future<List<Producto>> getProductoDetails(String userId) async {
         descripcion: doc['descripcion'],
         precio: doc['precio'],
         user: doc['user'],
-        imageUrl: doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
+        imageUrl:
+            doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
       ));
     }
 
@@ -38,35 +39,26 @@ Future<List<Producto>> getProductoDetails(String userId) async {
     return productos;
   } catch (e) {
     // Maneja errores de forma adecuada
-    throw Exception(
-        'No se pudo obtener la información de los productos.');
+    
+    throw Exception('No se pudo obtener la información de los productos.');
   }
 }
 
-
-void updateFood(Producto producto) {
+void actualizarProducto(Producto producto) {
   // Obtén una referencia al documento del producto en Firestore
   DocumentReference applianceRef =
       FirebaseFirestore.instance.collection('producto').doc(producto.id);
 
   // Actualiza los campos del producto en Firestore
-  applianceRef.update({
-    'producto': producto.producto,
-    'cantidad': producto.cantidad,
-    'descripcion': producto.descripcion,
-    'precio': producto.precio
-  }).then((_) {
-  }).catchError((error) {
-  });
-}
-
-void deleteProducto(Producto producto) {
-  DocumentReference productoRef =
-      FirebaseFirestore.instance.collection('producto').doc(producto.id);
-
-  productoRef.delete().then((doc) {
-  }).catchError((error) {
-  });
+  applianceRef
+      .update({
+        'producto': producto.producto,
+        'cantidad': producto.cantidad,
+        'descripcion': producto.descripcion,
+        'precio': producto.precio
+      })
+      .then((_) {})
+      .catchError((error) {});
 }
 
 //En uso
@@ -105,29 +97,13 @@ void registerProducto(
         .collection('productos')
         .doc(productoId)
         .set(product.toJson());
+    showPersonalizedAlert(
+        context, "Registro exitoso del producto", AlertMessageType.success);
   } catch (e) {
-    // ignore: use_build_context_synchronously
-    showPersonalizedAlert(context, 'Error al registrar la Food',
-        AlertMessageType.error);
+    showPersonalizedAlert(
+        context, 'Error al registrar el producto', AlertMessageType.error);
   }
 }
-
-/*Future<String> getFoodId(String nameFood, String userId) async {
-  try {
-    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('electrodomestico')
-        .where('name', isEqualTo: nameFood)
-        .where('user', isEqualTo: userId)
-        .get();
-
-    final foodId = querySnapshot.docs.first.id;
-    return foodId;
-    // No se encontró el electrodoméstico con el nombre proporcionado
-  } catch (e) {
-    throw Exception(
-        'No se pudo obtener el identificador de la comida.');
-  }
-}*/
 
 //En uso
 Future<Producto> getProducto(String productoId) async {
@@ -138,8 +114,9 @@ Future<Producto> getProducto(String productoId) async {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Map the data to a Food object
-      Map<String, dynamic> data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+      // Map the data to a product object
+      Map<String, dynamic> data =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
       Producto producto = Producto(
         id: data['id'],
         producto: data['producto'],
@@ -153,10 +130,10 @@ Future<Producto> getProducto(String productoId) async {
       return producto;
     } else {
       // No se encontró la comida con el ID proporcionado
-      throw Exception('No se encontró la comida con el ID proporcionado');
+      throw Exception('No se encontró el producto con el ID proporcionado');
     }
   } catch (e) {
-    throw Exception('No se pudo obtener la comida.');
+    throw Exception('No se pudo obtener el producto.');
   }
 }
 
@@ -179,7 +156,8 @@ Future<List<Producto>> getProductosDetails() async {
         descripcion: doc['descripcion'],
         precio: doc['precio'],
         user: doc['user'],
-        imageUrl: doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
+        imageUrl:
+            doc['imageUrl'] ?? 'none', // Include imageUrl with a default value
       ));
     }
 
@@ -187,17 +165,17 @@ Future<List<Producto>> getProductosDetails() async {
     return productos;
   } catch (e) {
     // Maneja errores de forma adecuada
-    throw Exception(
-        'No se pudo obtener la información de los productos.');
+    throw Exception('No se pudo obtener la información de los productos.');
   }
 }
 
-void eliminarProducto(Producto producto) {
+void eliminarProducto(BuildContext context, Producto producto) {
   DocumentReference documentReference =
       FirebaseFirestore.instance.collection('productos').doc(producto.id);
 
   documentReference.delete().then((doc) {
-    print("Producto eliminado correctamente");
+    showPersonalizedAlert(
+        context, "Producto eliminado correctamente", AlertMessageType.success);
     eliminarImagenProducto(producto.imageUrl);
   }).catchError((error) {
     print('Error al eliminar el producto: $error');
