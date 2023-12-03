@@ -72,7 +72,7 @@ void registerPropietario(
             .set(usuario.toJson());
 
         showPersonalizedAlert(
-            context, "Registro exitoso", AlertMessageType.notification);
+            context, "Registro exitoso", AlertMessageType.success);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginController()),

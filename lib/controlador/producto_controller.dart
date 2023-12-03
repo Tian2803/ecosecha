@@ -47,7 +47,7 @@ Future<List<Producto>> getProductoDetails(String userId) async {
 void actualizarProducto(Producto producto) {
   // Obtén una referencia al documento del producto en Firestore
   DocumentReference applianceRef =
-      FirebaseFirestore.instance.collection('producto').doc(producto.id);
+      FirebaseFirestore.instance.collection('productos').doc(producto.id);
 
   // Actualiza los campos del producto en Firestore
   applianceRef

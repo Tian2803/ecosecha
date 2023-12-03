@@ -3,6 +3,7 @@
 import 'package:ecosecha/controlador/campesino_controller.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/controlador/login_controller.dart';
+import 'package:ecosecha/controlador/producto_edit_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
 import 'package:ecosecha/vista/image_load_view.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
   void _openDrawer() {
     _scaffoldKey.currentState!.openDrawer();
   }
-  
+
   final email = FirebaseAuth.instance.currentUser!.email;
   final user = Container(
     margin: const EdgeInsets.only(top: 30.0, bottom: 20),
@@ -95,14 +96,15 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                     fit: BoxFit.cover)),
           ),
           const ListTile(
-              leading: Icon(Icons.delivery_dining),
-              title: Text("Pedidos"),
-              /*onTap: () {
+            leading: Icon(Icons.delivery_dining),
+            title: Text("Pedidos"),
+            /*onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ContactarExperto()));
-              }*/),
+              }*/
+          ),
           Expanded(child: Container()),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
@@ -146,8 +148,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                     children: productos.map((producto) {
                       return ExpansionTile(
                         leading: const Icon(Icons.restaurant),
-                        title:
-                            Text("Nombre: ${producto.producto}"),
+                        title: Text("Nombre: ${producto.producto}"),
                         subtitle: Text("Cantidad: ${producto.cantidad}"),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -155,21 +156,20 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () async {
-                                /*await Navigator.push(
+                                await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          productoEditController(
-                                            producto: producto,
-                                          )),
-                                );*/
+                                          ProductoEditController(
+                                              producto: producto)),
+                                );
                                 setState(() {});
                               },
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
-                                eliminarProducto(context,producto);
+                                eliminarProducto(context, producto);
                                 setState(() {});
                               },
                             ),
@@ -197,8 +197,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
           // Agrega la funcionalidad para el botón flotante aquí.
           await Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => const PhotoUpload()),
+            MaterialPageRoute(builder: (context) => const PhotoUpload()),
           );
           setState(() {});
         },

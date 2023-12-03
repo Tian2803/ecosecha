@@ -55,7 +55,7 @@ class ProductoEditView extends StatelessWidget {
                   },
                   // Filtro para permitir solo caracteres alfabéticos
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                    FilteringTextInputFormatter.allow(RegExp(r'[ a-zA-Z0-9]')),
                   ],
                 ),
                 const SizedBox(height: 16.0),
@@ -74,10 +74,13 @@ class ProductoEditView extends StatelessWidget {
                     }
                     return null;
                   },
-                  // Filtro para permitir solo caracteres alfabéticos
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-                  ],
+                  // Filtro para permitir solo numeros
+                  keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                        FilteringTextInputFormatter.singleLineFormatter,
+                        LengthLimitingTextInputFormatter(10),
+                      ],
                 ),
                 const SizedBox(height: 16.0),
                 // Campo de texto para la descripcion del producto
@@ -97,7 +100,7 @@ class ProductoEditView extends StatelessWidget {
                   },
                   // Filtro para permitir caracteres alfanuméricos
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                    FilteringTextInputFormatter.allow(RegExp(r'[ a-zA-Z0-9]')),
                   ],
                   readOnly: false, // Permite edición del campo
                 ),
@@ -117,9 +120,11 @@ class ProductoEditView extends StatelessWidget {
                     }
                     return null;
                   },
-                  // Filtro para permitir solo letras mayúsculas
+                  keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
+                    FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.singleLineFormatter,
+                    LengthLimitingTextInputFormatter(10),
                   ],
                   readOnly: false, // Permite edición del campo
                 ),

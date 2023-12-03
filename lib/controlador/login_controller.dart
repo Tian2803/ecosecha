@@ -1,5 +1,5 @@
 
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, use_key_in_widget_constructors
 
 import 'package:ecosecha/controlador/alert_dialog.dart';
 import 'package:ecosecha/controlador/campesino_controller.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController extends StatefulWidget {
-  const LoginController({super.key});
+  const LoginController();
 
   @override
   _LoginControllerState createState() => _LoginControllerState();

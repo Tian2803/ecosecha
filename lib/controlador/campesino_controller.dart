@@ -45,7 +45,7 @@ void registerCompany(String name, String telefono, String email, String address,
         showPersonalizedAlert(
           context,
           "Registro exitoso",
-          AlertMessageType.notification,
+          AlertMessageType.success,
         );
 
         Navigator.pushReplacement(
