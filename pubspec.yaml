@@ -42,6 +42,7 @@ dependencies:
   intl: ^0.18.1
   raised_buttons: ^0.0.2
   uuid: ^4.2.1
+  flutter_paypal_payment: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^3.0.0

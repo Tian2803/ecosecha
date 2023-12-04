@@ -4,6 +4,8 @@ import 'package:clippy_flutter/arc.dart';
 import 'package:ecosecha/controlador/detalle_pago_controller.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
+import 'package:ecosecha/vista/paypalpayment.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -256,13 +258,75 @@ class _ItemPageState extends State<ItemPage> {
               ElevatedButton(
                 onPressed: () {
                   pago = int.parse(producto.precio) * cantidad;
-                  registrarDetalle(
-                      context,
-                      producto.id,
-                      producto.user,
-                      cantidad.toString(),
-                      pago.toString());
+                  registrarDetalle(context, producto.id, producto.user,
+                      cantidad.toString(), pago.toString());
                   Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => PaypalCheckoutView(
+                        sandboxMode: true,
+                        clientId:
+                            "AcwdoaRTmWm5uGLAhw0oL05BsZcMj2yiBLuKqVygxxKLB7ws08MW1awtuHG7WMSDFQ7OOoVd0yqFf-NX",
+                        secretKey:
+                            "EOd4aPvFSurYf1WwVHLtbFP3Fbs5rJuuO2BucHtD6ecoBSJOAZKO6g-czOr1HIf9aqZMlTzg7sw3jeWd",
+                        transactions: [
+                          {
+                            "amount": {
+                              "total": pago,
+                              "currency": "USD",
+                              "details": {
+                                "subtotal": pago,
+                                "shipping": '0',
+                                "shipping_discount": 0
+                              }
+                            },
+                            "description":
+                                "Compra de ${cantidad} ${producto.producto} por un valor de ${pago}}}",
+                            // "payment_options": {
+                            //   "allowed_payment_method":
+                            //       "INSTANT_FUNDING_SOURCE"
+                            // },
+                            "item_list": {
+                              "items": [
+                                {
+                                  "name": "${producto.producto}",
+                                  "quantity": "${cantidad}",
+                                  "price": '${producto.precio}',
+                                  "currency": "USD"
+                                }
+                              ],
+
+                              // Optional
+                              //   "shipping_address": {
+                              //     "recipient_name": "Tharwat samy",
+                              //     "line1": "tharwat",
+                              //     "line2": "",
+                              //     "city": "tharwat",
+                              //     "country_code": "EG",
+                              //     "postal_code": "25025",
+                              //     "phone": "+00000000",
+                              //     "state": "ALex"
+                              //  },
+                            }
+                          }
+                        ],
+                        note: "Contact us for any questions on your order.",
+                        onSuccess: (Map params) async {
+                          print("onSuccess: $params");
+                          Navigator.pop(context);
+                        },
+                        onError: (error) {
+                          print("onError: $error");
+                          Navigator.pop(context);
+                        },
+                        onCancel: () {
+                          print('cancelled:');
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('Pagar'),
               ),
