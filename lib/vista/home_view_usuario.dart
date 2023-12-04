@@ -3,6 +3,7 @@
 import 'package:ecosecha/controlador/login_controller.dart';
 import 'package:ecosecha/controlador/usuario_controller.dart';
 import 'package:ecosecha/vista/producto_items.dart';
+import 'package:ecosecha/vista/vista_pedido.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -72,16 +73,15 @@ class _HomeViewUserState extends State<HomeViewUser> {
                 ),
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.delivery_dining),
-              title: Text("Pedidos"),
-              /*onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ContactarExperto()));
-              }*/
-            ),
+            ListTile(
+                leading: const Icon(Icons.delivery_dining),
+                title: const Text("Pedidos"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetallePagoItems()));
+                }),
             Expanded(child: Container()),
             ListTile(
               leading: const Icon(Icons.exit_to_app),

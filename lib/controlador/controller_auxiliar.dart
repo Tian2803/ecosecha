@@ -37,3 +37,21 @@ bool checkPasswordRequirements(String password) {
   RegExp regex = RegExp(passwordPattern);
   return regex.hasMatch(password);
 }
+
+String getFechaActual() {
+  DateTime fecha = DateTime.now();
+
+  String fechaFormateada =
+      '${fecha.year}-${_formatNumber(fecha.month)}-${_formatNumber(fecha.day)} '
+      '${_formatNumber(fecha.hour)}:${_formatNumber(fecha.minute)}:${_formatNumber(fecha.second)}';
+
+  return fechaFormateada;
+}
+
+String _formatNumber(int number) {
+  return number.toString().padLeft(2, '0');
+}
+
+bool isPhoneNumberValid(String phoneNumber) {
+  return phoneNumber.length == 10;
+}

@@ -1,3 +1,4 @@
+// ignore_for_file: use_key_in_widget_constructors
 import 'package:ecosecha/vista/register_campesino_view.dart';
 import 'package:ecosecha/vista/register_user_view.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class LoginView extends StatelessWidget {
   final bool isPasswordValid;
   final VoidCallback loginPressed;
 
-  LoginView({super.key, 
+  LoginView({
     required this.emailController,
     required this.passwordController,
     required this.isEmailValid,
@@ -26,7 +27,8 @@ class LoginView extends StatelessWidget {
     decoration: const BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
-            fit: BoxFit.cover, image: AssetImage("assets/images/ecosecha_logo.png"))),
+            fit: BoxFit.cover,
+            image: AssetImage("assets/images/ecosecha_logo.png"))),
   );
 
   final comment = const Text(
@@ -60,6 +62,8 @@ class LoginView extends StatelessWidget {
                   errorText:
                       isEmailValid ? null : 'Correo electrónico inválido',
                 ),
+                keyboardType:
+                    TextInputType.emailAddress, // Tipo de teclado para email
               ),
             ),
             SizedBox(height: 30, width: widthDevice),

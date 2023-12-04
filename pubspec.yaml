@@ -37,6 +37,7 @@ dependencies:
   firebase_storage: ^11.5.1
   flutter:
     sdk: flutter
+  food_icons: ^0.0.6
   image_picker: ^1.0.4
   intl: ^0.18.1
   raised_buttons: ^0.0.2

@@ -6,6 +6,7 @@ import 'package:ecosecha/controlador/login_controller.dart';
 import 'package:ecosecha/controlador/producto_edit_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
 import 'package:ecosecha/vista/image_load_view.dart';
+import 'package:ecosecha/vista/vista_pedido.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -95,16 +96,15 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                     image: AssetImage("assets/images/fondo.png"),
                     fit: BoxFit.cover)),
           ),
-          const ListTile(
-            leading: Icon(Icons.delivery_dining),
-            title: Text("Pedidos"),
-            /*onTap: () {
+          ListTile(
+              leading: const Icon(Icons.delivery_dining),
+              title: const Text("Pedidos"),
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ContactarExperto()));
-              }*/
-          ),
+                        builder: (context) => DetallePagoItems()));
+              }),
           Expanded(child: Container()),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
@@ -169,7 +169,7 @@ class _HomeViewCompanyState extends State<HomeViewCompany> {
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
-                                eliminarProducto(context, producto);
+                                eliminarProducto(producto);
                                 setState(() {});
                               },
                             ),

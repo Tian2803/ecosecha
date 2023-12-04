@@ -1,10 +1,12 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
 import 'package:ecosecha/vista/producto_item_page.dart';
 import 'package:flutter/material.dart';
 
 class ProductoItems extends StatelessWidget {
-  const ProductoItems({Key? key});
+  const ProductoItems();
 
   @override
   Widget build(BuildContext context) {

@@ -22,7 +22,6 @@ void showPersonalizedAlert(
   );
 }
 
-
 Color _getSnackBarColor(AlertMessageType alertMessageType) {
   switch (alertMessageType) {
     case AlertMessageType.success:
@@ -34,16 +33,12 @@ Color _getSnackBarColor(AlertMessageType alertMessageType) {
     case AlertMessageType.notification:
       return Colors.blue;
     default:
-      return Colors.blue; // Color por defecto o cualquier otro valor que desees.
+      return Colors
+          .blue; // Color por defecto o cualquier otro valor que desees.
   }
 }
 
-enum AlertMessageType {
-  success,
-  error,
-  warning,
-  notification
-}
+enum AlertMessageType { success, error, warning, notification }
 
 IconData _getIconData(AlertMessageType messageType) {
   switch (messageType) {

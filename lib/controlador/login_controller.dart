@@ -1,4 +1,3 @@
-
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, use_key_in_widget_constructors
 
 import 'package:ecosecha/controlador/alert_dialog.dart';
@@ -40,14 +39,46 @@ class _LoginControllerState extends State<LoginController> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const HomeViewUser()));
       }
-      
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showPersonalizedAlert(
-            context, 'Usuario no encontrado', AlertMessageType.warning);
+          context,
+          'Usuario no encontrado',
+          AlertMessageType.warning,
+        );
       } else if (e.code == 'wrong-password') {
         showPersonalizedAlert(
-            context, 'Contraseña incorrecta', AlertMessageType.warning);
+          context,
+          'Contraseña incorrecta',
+          AlertMessageType.warning,
+        );
+      } else if (e.code == 'invalid-email') {
+        showPersonalizedAlert(
+          context,
+          'El formato del correo electrónico\nno es válido.',
+          AlertMessageType.error,
+        );
+      } else if (e.code == 'user-disabled') {
+        showPersonalizedAlert(
+          context,
+          'Su cuenta está deshabilitada.',
+          AlertMessageType.error,
+        );
+      } else if (e.code == 'network-request-failed') {
+        showPersonalizedAlert(
+          context,
+          'Problema de red durante la autenticación.',
+          AlertMessageType.error,
+        );
+      } else if (e.code == 'too-many-requests') {
+        showPersonalizedAlert(
+          context,
+          'Demasiadas solicitudes desde el\nmismo dispositivo o IP.',
+          AlertMessageType.error,
+        );
+      } else {
+        showPersonalizedAlert(context, 'Error al iniciar sesión: ${e.message}',
+            AlertMessageType.error);
       }
     }
   }

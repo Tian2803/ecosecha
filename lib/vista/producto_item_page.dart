@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, use_key_in_widget_constructors, avoid_print, unnecessary_null_comparison
 
 import 'package:clippy_flutter/arc.dart';
+import 'package:ecosecha/controlador/detalle_pago_controller.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,9 +17,11 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
-  late Producto producto = Producto.defaultConstructor(); // Updated to a late variable
+  late Producto producto =
+      Producto.defaultConstructor(); // Updated to a late variable
 
   int cantidad = 1; // Local state to track quantity
+  int pago = 0;
 
   @override
   void initState() {
@@ -44,7 +47,8 @@ class _ItemPageState extends State<ItemPage> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
       appBar: AppBar(
-        title: const Text('Detalles del Producto'),),
+        title: const Text('Detalles del Producto'),
+      ),
       body: producto != null
           ? Padding(
               padding: const EdgeInsets.only(top: 5),
@@ -52,7 +56,8 @@ class _ItemPageState extends State<ItemPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Image.network(producto.imageUrl,
+                    child: Image.network(
+                      producto.imageUrl,
                       height: 300,
                       width: 100,
                     ),
@@ -71,7 +76,7 @@ class _ItemPageState extends State<ItemPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Precio: ${producto.precio}",
+                              "Precio: \$${producto.precio}",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -89,10 +94,30 @@ class _ItemPageState extends State<ItemPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          producto.producto,
+                          "Unidades disponibles: ${producto.cantidad} Kg",
                           style: const TextStyle(
-                            fontSize: 28,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          // Usa Flexible para permitir que el espacio se ajuste al contenido
+                          child: Text(
+                            producto.producto,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Container(
@@ -156,7 +181,7 @@ class _ItemPageState extends State<ItemPage> {
                             text: 'Descripción',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 20,
                               color: Colors.black,
                               decoration: TextDecoration.none,
                             ),
@@ -197,7 +222,7 @@ class _ItemPageState extends State<ItemPage> {
                               ),
                             ),
                             Text(
-                              "30 minutos",
+                              "60 minutos",
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -230,7 +255,14 @@ class _ItemPageState extends State<ItemPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Add logic to add the order
+                  pago = int.parse(producto.precio) * cantidad;
+                  registrarDetalle(
+                      context,
+                      producto.id,
+                      producto.user,
+                      cantidad.toString(),
+                      pago.toString());
+                  Navigator.pop(context);
                 },
                 child: const Text('Pagar'),
               ),

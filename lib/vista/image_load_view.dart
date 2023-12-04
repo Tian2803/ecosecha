@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:io';
 import 'package:ecosecha/controlador/controller_auxiliar.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:raised_buttons/raised_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -89,6 +92,13 @@ class _PhotoUploadState extends State<PhotoUpload> {
                 labelText: 'Cantidad',
                 prefixIcon: Icon(Icons.unfold_more_double_sharp),
               ),
+              // Filtro para permitir solo numeros
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.singleLineFormatter,
+                LengthLimitingTextInputFormatter(10),
+              ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Por favor ingrese la cantidad del alimento';
@@ -119,6 +129,13 @@ class _PhotoUploadState extends State<PhotoUpload> {
                 labelText: 'Precio del alimento',
                 prefixIcon: Icon(Icons.monetization_on_outlined),
               ),
+              // Filtro para permitir solo numeros
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.singleLineFormatter,
+                LengthLimitingTextInputFormatter(10),
+              ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Por favor ingrese el precio del alimento';
@@ -133,8 +150,7 @@ class _PhotoUploadState extends State<PhotoUpload> {
               text: "Guardar",
               onPressed: () {
                 validateAndSave();
-                setState(() {
-                });
+                setState(() {});
               },
               fontSize: 18,
             ),
@@ -163,11 +179,8 @@ class _PhotoUploadState extends State<PhotoUpload> {
       String fileName =
           "${productoId}_${DateTime.now().millisecondsSinceEpoch}.$extension";
 
-      firebase_storage.Reference reference = firebase_storage
-          .FirebaseStorage.instance
-          .ref()
-          .child("images")
-          .child(fileName);
+      firebase_storage.Reference reference =
+          firebase_storage.FirebaseStorage.instance.ref().child('imagesProductos').child(fileName);
 
       await reference.putFile(File(sampleImage.path));
       String downloadURL = await reference.getDownloadURL();
@@ -175,6 +188,7 @@ class _PhotoUploadState extends State<PhotoUpload> {
 
       // Guardar la URL y el ID del producto en Firestore
       saveToFirestore(productoId, downloadURL);
+      Navigator.pop(context);
     } catch (e) {
       print("Error al subir la imagen: $e");
     }

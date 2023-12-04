@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:ecosecha/controlador/alert_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,7 +45,7 @@ class ProductoEditView extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Nombre del producto',
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.tv),
+                    prefixIcon: Icon(CupertinoIcons.archivebox_fill),
                   ),
                   // Validación del campo
                   validator: (value) {
@@ -65,7 +66,7 @@ class ProductoEditView extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Cantidad',
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.business),
+                    prefixIcon: Icon(Icons.production_quantity_limits),
                   ),
                   // Validación del campo
                   validator: (value) {
@@ -76,11 +77,11 @@ class ProductoEditView extends StatelessWidget {
                   },
                   // Filtro para permitir solo numeros
                   keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                        FilteringTextInputFormatter.singleLineFormatter,
-                        LengthLimitingTextInputFormatter(10),
-                      ],
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.singleLineFormatter,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
                 ),
                 const SizedBox(height: 16.0),
                 // Campo de texto para la descripcion del producto
@@ -111,15 +112,9 @@ class ProductoEditView extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Precio',
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.energy_savings_leaf),
+                    prefixIcon: Icon(CupertinoIcons.money_dollar),
                   ),
-                  // Validación del campo
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor ingrese el precio de producto';
-                    }
-                    return null;
-                  },
+
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
@@ -127,6 +122,14 @@ class ProductoEditView extends StatelessWidget {
                     LengthLimitingTextInputFormatter(10),
                   ],
                   readOnly: false, // Permite edición del campo
+
+                  // Validación del campo
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor ingrese el precio de producto';
+                    }
+                    return null;
+                  },
                 ),
               ]),
             ),
