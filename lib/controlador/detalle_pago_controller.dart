@@ -6,6 +6,7 @@ import 'package:ecosecha/controlador/campesino_controller.dart';
 import 'package:ecosecha/controlador/controller_auxiliar.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/detalle_pago.dart';
+import 'package:ecosecha/vista/paypalpayment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,31 @@ void registrarDetalle(
   } catch (e) {
     showPersonalizedAlert(
         context, 'Error al registrar la Food', AlertMessageType.error);
+  }
+}
+
+Future<DetallePago> getDetallePago(String id) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  try {
+    // Realiza la consulta a Firebase Firestore
+    DocumentSnapshot snapshot =
+        await firestore.collection('detallePago').doc(id).get();
+
+    // Devuelve una instancia de la clase DetallePago
+    return DetallePago(
+      idDetallePago: snapshot['idDetallePago'],
+      productoId: snapshot['productoId'],
+      campesinoId: snapshot['campesinoId'],
+      userId: snapshot['userId'],
+      cantidad: snapshot['cantidad'],
+      pago: snapshot['pago'],
+      fecha: snapshot['fecha'],
+    );
+  } catch (e) {
+    // Maneja errores de forma adecuada
+    print('Error, no se logró obtener la información del detalle de pago: $e');
+    throw Exception('No se pudo obtener la información del detalle de pago.');
   }
 }
 
