@@ -32,7 +32,12 @@ class DetallePagoItems extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final detalle = snapshot.data;
+            // Obtener la lista de detalles
+            List<DetallePago>? detalle = snapshot.data;
+
+            // Ordenar la lista por fecha en orden descendente
+            detalle?.sort((a, b) => b.fecha.compareTo(a.fecha));
+
             if (detalle != null && detalle.isNotEmpty) {
               return SingleChildScrollView(
                 child: Padding(
