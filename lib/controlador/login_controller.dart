@@ -1,3 +1,4 @@
+
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, use_key_in_widget_constructors
 
 import 'package:ecosecha/controlador/alert_dialog.dart';
@@ -39,6 +40,7 @@ class _LoginControllerState extends State<LoginController> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const HomeViewUser()));
       }
+      
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showPersonalizedAlert(
