@@ -1,113 +1,208 @@
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'package:ecosecha/controlador/login_controller.dart';
-import 'package:ecosecha/controlador/usuario_controller.dart';
-import 'package:ecosecha/vista/producto_items.dart';
-import 'package:ecosecha/vista/vista_pedido.dart';
+import 'package:ecosecha/components/widget/SearchWidget.dart';
+import 'package:ecosecha/components/animation/ScaleRoute.dart';
+import 'package:ecosecha/components/items/category_item.dart';
+import 'package:ecosecha/components/data.dart';
+import 'package:ecosecha/components/drawer/custom_drawer_user.dart';
+import 'package:ecosecha/components/items/feature_item.dart';
+import 'package:ecosecha/components/navbar/nav_bar_user.dart';
+import 'package:ecosecha/components/items/popular_item.dart';
+import 'package:ecosecha/controlador/producto_controller.dart';
+import 'package:ecosecha/logica/producto.dart';
+import 'package:ecosecha/styles/app_colors.dart';
+import 'package:ecosecha/vista/notification.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomeViewUser extends StatefulWidget {
-  const HomeViewUser({Key? key});
+class HomeScreenUser extends StatefulWidget {
+  const HomeScreenUser({super.key});
 
   @override
-  State<HomeViewUser> createState() => _HomeViewUserState();
+  State<HomeScreenUser> createState() => _HomeScreenUserState();
 }
 
-class _HomeViewUserState extends State<HomeViewUser> {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void _openDrawer() {
-    _scaffoldKey.currentState!.openDrawer();
-  }
-
-  final email = FirebaseAuth.instance.currentUser!.email;
-
+class _HomeScreenUserState extends State<HomeScreenUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      key: _scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: FutureBuilder<String?>(
-                future: getUserName(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data == null) {
-                    return const Text('Usuario no autenticado o sin nombre.');
-                  } else {
-                    final userName = snapshot.data;
-                    return Text(
-                      '$userName',
-                      style: const TextStyle(color: Colors.white),
-                    );
-                  }
-                },
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          "What would you like to eat?",
+          style: TextStyle(
+              color: Color(0xFF3a3737),
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.notifications_none,
+                color: Color(0xFF3a3737),
               ),
-              accountEmail: Text(
-                "$email",
-                style: const TextStyle(color: Colors.white),
-              ),
-              currentAccountPicture: CircleAvatar(
-                child: ClipOval(
-                  child: Image.network(
-                    'https://th.bing.com/th/id/OIP.EvZTZb4KMBsXT4RiH5DVpgHaE8?pid=ImgDet&w=474&h=316&rs=1',
-                    width: 90,
-                    height: 90,
-                    fit: BoxFit.cover,
-                  ),
+              onPressed: () {
+                Navigator.push(context, ScaleRoute(page: const NotificationPage()));
+              })
+        ],
+      ),
+      drawer: const CustomDrawerUser(),
+      body: _buildBody(),
+      bottomNavigationBar: const NavBarUser(),
+    );
+  }
+
+  _buildBody() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SearchWidget(),
+          const SizedBox(
+            height: 25,
+          ),
+          _buildAdsImage(),
+          const SizedBox(
+            height: 25,
+          ),
+          _buildCategories(),
+          const SizedBox(
+            height: 20,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Popular foods",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/fondo.png"),
-                  fit: BoxFit.cover,
+                Text(
+                  "See all",
+                  style: TextStyle(fontSize: 14, color: AppColors.darker),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          _buildPopulars(),
+          const SizedBox(
+            height: 20,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Text(
+              "Featured",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: _buildFeatured(),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildAdsImage() {
+    return Container(
+      margin: const EdgeInsets.only(left: 15, right: 15),
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(15),
+        image: const DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage("assets/images/OIG1.jpeg"),
+        ),
+      ),
+    );
+  }
+
+  _buildCategories() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.only(bottom: 5, left: 15),
+      child: Row(
+        children: [
+          const CategoryItem(
+            data: {
+              "name": "All",
+              "icon": FontAwesomeIcons.th,
+            },
+            seleted: true,
+          ),
+          ...List.generate(
+            categories.length,
+            (index) => CategoryItem(data: categories[index]),
+          )
+        ],
+      ),
+    );
+  }
+
+  _buildPopulars() {
+    return FutureBuilder<List<Product>>(
+      future: ProductController()
+          .getProductsDetails(), // Asumiendo que hay un método específico para obtener productos populares
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<Product> popularProducts = snapshot.data!;
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 15),
+            child: Row(
+              children: List.generate(
+                popularProducts.length,
+                (index) => PopularItem(
+                  product: popularProducts[index],
                 ),
               ),
             ),
-            ListTile(
-                leading: const Icon(Icons.delivery_dining),
-                title: const Text("Pedidos"),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DetallePagoItems()));
-                }),
-            Expanded(child: Container()),
-            ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text("Cerrar sesión"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginController(),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            _openDrawer();
-          },
-        ),
-        title: const Text("Productos agrícolas"),
-      ),
-      body: const ProductoItems(),
+          );
+        }
+      },
+    );
+  }
+
+  _buildFeatured() {
+    return FutureBuilder<List<Product>>(
+      future: ProductController()
+          .getProductsDetails(), // Call the function to get product details
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // If the data is still loading, display a loading indicator
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // If there is an error while fetching data, display an error message
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // If the data is successfully loaded, pass it to FeaturedItem widget
+          List<Product> products = snapshot.data!;
+          return Column(
+            children: List.generate(
+              products.length,
+              (index) => FeaturedItem(product: products[index]),
+            ),
+          );
+        }
+      },
     );
   }
 }

@@ -1,50 +1,55 @@
-class Producto {
+class Product {
   final String id;
-  final String producto;
-  final String cantidad;
-  final String descripcion;
-  final String precio;
+  final String product;
+  final int quantity;
+  final String description;
+  final double price;
+  final String category;
   final String user;
-  final String imageUrl; // Add imageUrl attribute
+  final String productImage; // Add profuctImage attribute
 
-  Producto({
+  Product({
     required this.id,
-    required this.producto,
-    required this.cantidad,
-    required this.descripcion,
-    required this.precio,
+    required this.product,
+    required this.quantity,
+    required this.description,
+    required this.price,
+    required this.category,
     required this.user,
-    required this.imageUrl, // Include imageUrl in the constructor
+    required this.productImage, // Include profuctImage in the constructor
   });
 
-  Producto.defaultConstructor()
+  Product.defaultConstructor()
       : id = 'ecosecha',
-        producto = 'none',
-        cantidad = '0',
-        descripcion = 'none',
-        precio = '0',
+        product = 'none',
+        quantity = 0,
+        description = 'none',
+        price = 0.0,
+        category = 'none',
         user = 'none',
-        imageUrl = 'https://firebasestorage.googleapis.com/v0/b/ecosecha-b539c.appspot.com/o/loading.gif?alt=media&token=46c14757-6666-4ddf-a886-b95e183ac967'; // Set a default value for imageUrl
+        productImage = 'https://firebasestorage.googleapis.com/v0/b/ecosecha-b539c.appspot.com/o/loading.gif?alt=media&token=46c14757-6666-4ddf-a886-b95e183ac967'; // Set a default value for profuctImage
 
-  factory Producto.fromJson(Map<String, dynamic> json) {
-    return Producto(
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
       id: json['id'],
-      producto: json['producto'],
-      cantidad: json['cantidad'],
-      descripcion: json['descripcion'],
-      precio: json['precio'],
+      product: json['product'],
+      quantity: json['quantity'],
+      description: json['description'],
+      price: json['price'],
+      category: json['category'],
       user: json['user'],
-      imageUrl: json['imageUrl'], // Retrieve imageUrl from the JSON
+      productImage: json['productImage'], // Retrieve profuctImage from the JSON
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'producto': producto,
-        'cantidad': cantidad,
-        'descripcion': descripcion,
-        'precio': precio,
+        'product': product,
+        'quantity': quantity,
+        'description': description,
+        'price': price,
+        'category': category,
         'user': user,
-        'imageUrl': imageUrl, // Include imageUrl in the JSON
+        'productImage': productImage, // Include profuctImage in the JSON
       };
 }

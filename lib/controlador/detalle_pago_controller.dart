@@ -6,11 +6,11 @@ import 'package:ecosecha/controlador/campesino_controller.dart';
 import 'package:ecosecha/controlador/controller_auxiliar.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/detalle_pago.dart';
-import 'package:ecosecha/vista/paypalpayment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-void registrarDetalle(
+class DetailPaymentController {
+  void registrarDetalle(
     BuildContext context,
     String productoId,
     String campesinoId,
@@ -18,7 +18,7 @@ void registrarDetalle(
     String pago // Include imageUrl parameter
     ) async {
   try {
-    String idDetallePago = generateId();
+    String idDetallePago = AuxController().generateId();
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -29,7 +29,7 @@ void registrarDetalle(
         userId: uid,
         cantidad: cantidad,
         pago: pago,
-        fecha: getFechaActual());
+        fecha: AuxController().getFechaActual());
 
     await FirebaseFirestore.instance
         .collection('detallePago')
@@ -72,7 +72,7 @@ Future<List<DetallePago>> getDetallePagoUsuario(String id) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   try {
-    String? campesinoId = await getCampesinoId();
+    String? campesinoId = await CampesinoController().getCampesinoId();
     // Inicializa una lista para almacenar los detalles de pago
     List<DetallePago> detallePago = [];
 
@@ -86,7 +86,7 @@ Future<List<DetallePago>> getDetallePagoUsuario(String id) async {
       // Recorre los documentos y crea instancias de la clase DetallePago
       for (QueryDocumentSnapshot doc in snapshot.docs) {
         // Obtener el nombre del producto
-        String nombreProducto = await getNombreProducto(doc['productoId']);
+        String nombreProducto = await ProductController().getNameProduct(doc['productoId']);
 
         detallePago.add(DetallePago(
           idDetallePago: doc['idDetallePago'],
@@ -108,7 +108,7 @@ Future<List<DetallePago>> getDetallePagoUsuario(String id) async {
       // Recorre los documentos y crea instancias de la clase DetallePago
       for (QueryDocumentSnapshot doc in snapshot.docs) {
         // Obtener el nombre del producto
-        String nombreProducto = await getNombreProducto(doc['productoId']);
+        String nombreProducto = await ProductController().getNameProduct(doc['productoId']);
 
         detallePago.add(DetallePago(
           idDetallePago: doc['idDetallePago'],
@@ -131,4 +131,6 @@ Future<List<DetallePago>> getDetallePagoUsuario(String id) async {
     throw Exception(
         'No se pudo obtener la información de los detalles de pago.');
   }
+}
+
 }

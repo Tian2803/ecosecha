@@ -4,7 +4,6 @@ import 'package:clippy_flutter/arc.dart';
 import 'package:ecosecha/controlador/detalle_pago_controller.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
-import 'package:ecosecha/vista/paypalpayment.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +18,11 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
-  late Producto producto =
-      Producto.defaultConstructor(); // Updated to a late variable
+  late Product producto =
+      Product.defaultConstructor(); // Updated to a late variable
 
   int cantidad = 1; // Local state to track quantity
-  int pago = 0;
+  double pago = 0;
 
   @override
   void initState() {
@@ -34,7 +33,7 @@ class _ItemPageState extends State<ItemPage> {
   Future<void> _loadData() async {
     try {
       // Call the getProducto function from the product controller or logic
-      Producto loadedProducto = await getProducto(widget.productoId);
+      Product loadedProducto = await ProductController().getProduct(widget.productoId);
       setState(() {
         producto = loadedProducto;
       });
@@ -59,7 +58,7 @@ class _ItemPageState extends State<ItemPage> {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Image.network(
-                      producto.imageUrl,
+                      producto.productImage,
                       height: 300,
                       width: 100,
                     ),
@@ -78,7 +77,7 @@ class _ItemPageState extends State<ItemPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Precio: \$${producto.precio}",
+                              "Precio: \$${producto.price}",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -96,7 +95,7 @@ class _ItemPageState extends State<ItemPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Unidades disponibles: ${producto.cantidad} Kg",
+                          "Unidades disponibles: ${producto.quantity} Kg",
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -115,7 +114,7 @@ class _ItemPageState extends State<ItemPage> {
                         Flexible(
                           // Usa Flexible para permitir que el espacio se ajuste al contenido
                           child: Text(
-                            producto.producto,
+                            producto.product,
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -189,7 +188,7 @@ class _ItemPageState extends State<ItemPage> {
                             ),
                           ),
                           TextSpan(
-                            text: '\n${producto.descripcion}',
+                            text: '\n${producto.description}',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -248,7 +247,7 @@ class _ItemPageState extends State<ItemPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total: \$${int.parse(producto.precio) * cantidad}', // Replace with real logic
+                'Total: \$${producto.price * cantidad}', // Replace with real logic
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -257,8 +256,8 @@ class _ItemPageState extends State<ItemPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  pago = int.parse(producto.precio) * cantidad;
-                  registrarDetalle(context, producto.id, producto.user,
+                  pago = (producto.price * cantidad);
+                  DetailPaymentController().registrarDetalle(context, producto.id, producto.user,
                       cantidad.toString(), pago.toString());
                   Navigator.pop(context);
                   Navigator.push(
@@ -282,7 +281,7 @@ class _ItemPageState extends State<ItemPage> {
                               }
                             },
                             "description":
-                                "Compra de ${cantidad} ${producto.producto} por un valor de ${pago}}}",
+                                "Compra de ${cantidad} ${producto.product} por un valor de ${pago}}}",
                             // "payment_options": {
                             //   "allowed_payment_method":
                             //       "INSTANT_FUNDING_SOURCE"
@@ -290,9 +289,9 @@ class _ItemPageState extends State<ItemPage> {
                             "item_list": {
                               "items": [
                                 {
-                                  "name": "${producto.producto}",
-                                  "quantity": "${cantidad}",
-                                  "price": '${producto.precio}',
+                                  "name": producto.product,
+                                  "quantity": cantidad,
+                                  "price": '${producto.price}',
                                   "currency": "USD"
                                 }
                               ],

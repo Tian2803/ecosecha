@@ -1,140 +1,163 @@
-// ignore_for_file: use_key_in_widget_constructors
+
+import 'package:ecosecha/components/custom/custom_button.dart';
+import 'package:ecosecha/components/custom/custom_formfield.dart';
+import 'package:ecosecha/components/custom/custom_header.dart';
+import 'package:ecosecha/components/custom/custom_richtext.dart';
+import 'package:ecosecha/controlador/auth_controller.dart';
+import 'package:ecosecha/controlador/controller_auxiliar.dart';
+import 'package:ecosecha/styles/app_colors.dart';
 import 'package:ecosecha/vista/register_campesino_view.dart';
 import 'package:ecosecha/vista/register_user_view.dart';
 import 'package:flutter/material.dart';
 
-class LoginView extends StatelessWidget {
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final bool isEmailValid;
-  final bool isPasswordValid;
-  final VoidCallback loginPressed;
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
-  LoginView({
-    required this.emailController,
-    required this.passwordController,
-    required this.isEmailValid,
-    required this.isPasswordValid,
-    required this.loginPressed,
-  });
+  @override
+  State<SignIn> createState() => _SigninState();
+}
 
-  final photo = Container(
-    margin: const EdgeInsets.only(
-      top: 40.0,
-    ),
-    width: 222.0,
-    height: 280.0,
-    decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage("assets/images/ecosecha_logo.png"))),
-  );
+class _SigninState extends State<SignIn> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  final comment = const Text(
-    "Bienvenido a Ecosecha",
-    textAlign: TextAlign.justify,
-    style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
-  );
+  String get email => _emailController.text.trim();
+  String get password => _passwordController.text.trim();
+  bool _obscureText = true;
+  String? _errorTextPassword;
 
   @override
   Widget build(BuildContext context) {
-    double widthDevice = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(248, 248, 248, 246),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            photo,
-            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-            comment,
-            SizedBox(height: MediaQuery.of(context).size.height * 0.035),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.91,
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.email),
-                  contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                  labelText: 'Correo electrónico',
-                  border: const OutlineInputBorder(),
-                  errorText:
-                      isEmailValid ? null : 'Correo electrónico inválido',
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            color: AppColors.blue,
+          ),
+          const CustomHeader(
+            text: 'Log In.',
+            /*onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OnboardScreen()));
+            },*/
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.08,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                  color: AppColors.whiteshade,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40))),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.09),
+                      child: Image.asset("assets/images/ecosecha_logo.png"),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomFormField(
+                      headingText: "Email",
+                      hintText: "exampledelivery@gmail.com",
+                      obsecureText: false,
+                      suffixIcon: const SizedBox(),
+                      controller: _emailController,
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomFormField(
+                      headingText: "Password",
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.text,
+                      hintText: "At least 15 Character",
+                      obsecureText: _obscureText,
+                      suffixIcon: IconButton(
+                          icon: _obscureText
+                              ? const Icon(Icons.visibility_off)
+                              : const Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          }),
+                      controller: _passwordController,
+                      errorText: _errorTextPassword,
+                      onChanged: (value) {
+                        setState(() {
+                          _errorTextPassword = (AuxController()
+                                  .isPasswordLengthValid(value))
+                              ? 'Password must be at least 15 characters long'
+                              : null;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          child: InkWell(
+                            onTap: () {},
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                  color: AppColors.blue.withOpacity(0.7),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    AuthButton(
+                      onTap: () {
+                        AuthController().signInUser(context, email, password);
+                      },
+                      text: 'Sign In',
+                    ),
+                    CustomRichText(
+                      discription: "Don't already Have an account? ",
+                      text: "Sign Up usuario",
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUpUser()));
+                      },
+                    ),
+                    CustomRichText(
+                      text: "Sign Up Campesino",
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUpFarmer()));
+                      },
+                    ),
+                  ],
                 ),
-                keyboardType:
-                    TextInputType.emailAddress, // Tipo de teclado para email
               ),
             ),
-            SizedBox(height: 30, width: widthDevice),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.91,
-              child: TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.vpn_key),
-                    contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    labelText: 'Contraseña',
-                    errorText: isPasswordValid ? null : 'Contraseña inválida',
-                    border: const OutlineInputBorder()),
-                obscureText: true,
-              ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.050),
-            ElevatedButton(
-              onPressed: loginPressed,
-              child: const Text('Iniciar sesión'),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Alineación de los botones y espacio entre ellos
-              children: <Widget>[
-                const Text("¿No tienes cuenta? "),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterUserView()));
-                  },
-                  child: const Text(
-                    "Crear",
-                    style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Alineación de los botones y espacio entre ellos
-              children: <Widget>[
-                const Text("Si eres un campesino presiona "),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const RegisterCampesinoView()));
-                  },
-                  child: const Text(
-                    "aqui",
-                    style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

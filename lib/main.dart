@@ -1,5 +1,5 @@
-import 'package:ecosecha/controlador/login_controller.dart';
 import 'package:ecosecha/firebase_options.dart';
+import 'package:ecosecha/vista/onboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginController(),
+      home: const OnboardScreen(),
     );
   }
 }

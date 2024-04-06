@@ -1,209 +1,240 @@
-// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, avoid_print
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, avoid_print
 
-import 'package:ecosecha/controlador/campesino_controller.dart';
+import 'package:ecosecha/components/widget/SearchWidget.dart';
+import 'package:ecosecha/components/animation/ScaleRoute.dart';
+import 'package:ecosecha/components/custom/custom_image.dart';
+import 'package:ecosecha/components/drawer/custom_drawer_farmer.dart';
+import 'package:ecosecha/components/navbar/nav_bar_farmer.dart';
 import 'package:ecosecha/controlador/producto_controller.dart';
-import 'package:ecosecha/controlador/login_controller.dart';
-import 'package:ecosecha/controlador/producto_edit_controller.dart';
 import 'package:ecosecha/logica/producto.dart';
-import 'package:ecosecha/vista/image_load_view.dart';
-import 'package:ecosecha/vista/vista_pedido.dart';
-import 'package:flutter/material.dart';
+import 'package:ecosecha/styles/app_colors.dart';
+import 'package:ecosecha/vista/product_show.dart';
+import 'package:ecosecha/vista/product_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class HomeViewCompany extends StatefulWidget {
-  const HomeViewCompany({Key? key});
+class HomeScreenFarmer extends StatefulWidget {
+  const HomeScreenFarmer({Key? key}) : super(key: key);
 
   @override
-  State<HomeViewCompany> createState() => _HomeViewCompanyState();
+  _HomeScreenFarmerState createState() => _HomeScreenFarmerState();
 }
 
-class _HomeViewCompanyState extends State<HomeViewCompany> {
+class _HomeScreenFarmerState extends State<HomeScreenFarmer> {
   final uid = FirebaseAuth.instance.currentUser!.uid;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  void _openDrawer() {
-    _scaffoldKey.currentState!.openDrawer();
+  late List<Product> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Cargar productos al inicializar la página
+        print(uid);
+    _loadProducts();
   }
 
-  final email = FirebaseAuth.instance.currentUser!.email;
-  final user = Container(
-    margin: const EdgeInsets.only(top: 30.0, bottom: 20),
-    width: 100.0,
-    height: 100.0,
-    decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://th.bing.com/th/id/OIP.EvZTZb4KMBsXT4RiH5DVpgHaE8?pid=ImgDet&w=474&h=316&rs=1"))),
-  );
+  Future<void> _loadProducts() async {
+    try {
+      List<Product> fetchedProducts = await ProductController().getProductDetails(uid);
+      setState(() {
+        products = fetchedProducts;
+      });
+    } catch (e) {
+      print('Error al cargar los productos: $e');
+    }
+  }
 
-  final signOut = Container(
-    margin: const EdgeInsets.only(top: 4),
-    padding: const EdgeInsets.all(10),
-    width: double.infinity,
-    color: const Color.fromARGB(209, 127, 206, 243),
-    child: const Text(
-      "Cerrar sesion",
-      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    ),
-  );
-  //Aqui va la  hoja de
   @override
   Widget build(BuildContext context) {
+    // Cargar productos cada vez que se llega a la página
+    _loadProducts();
+
     return Scaffold(
       backgroundColor: Colors.white,
-      key: _scaffoldKey, // Asignamos la clave al Scaffold
-      drawer: Drawer(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: FutureBuilder<String?>(
-              future: getUserNameCampesino(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data == null) {
-                  return const Text('Usuario no autenticado o sin nombre.');
-                } else {
-                  final userName = snapshot.data;
-                  return Text(
-                    '$userName',
-                    style: const TextStyle(color: Colors.white),
-                  );
-                }
-              },
-            ),
-            accountEmail: Text(
-              "$email",
-              style: const TextStyle(color: Colors.white),
-            ),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.network(
-                  'https://th.bing.com/th/id/OIP.EvZTZb4KMBsXT4RiH5DVpgHaE8?pid=ImgDet&w=474&h=316&rs=1',
-                  width: 90, // Ajusta el ancho según tus necesidades
-                  height: 90, // Ajusta la altura según tus necesidades
-                  fit: BoxFit
-                      .cover, // Ajusta la forma en que la imagen se adapta al círculo
-                ),
-              ),
-            ),
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/fondo.png"),
-                    fit: BoxFit.cover)),
+      appBar: _buildAppBar(),
+      drawer: const CustomDrawerFarmer(),
+      body: _buildBody(),
+      bottomNavigationBar: const NavBarCampesino(),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      title: const Text(
+        "What would you like to add menu?",
+        style: TextStyle(
+          color: Color(0xFF3a3737),
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      iconTheme: const IconThemeData(color: Colors.black),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.notifications_none,
+            color: Color(0xFF3a3737),
           ),
-          ListTile(
-              leading: const Icon(Icons.delivery_dining),
-              title: const Text("Pedidos"),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetallePagoItems()));
-              }),
-          Expanded(child: Container()),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text("Cerrar sesion"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const LoginController()),
-              );
-            },
-          )
-        ],
-      )),
-      appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              _openDrawer();
-            },
-          ),
-          title: const Text("Productos")),
-      body: ListView(
+          onPressed: () {
+            Navigator.push(
+              context,
+              ScaleRoute(page: const HomeScreenFarmer()),
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<List<Producto>>(
-            future: getProductoDetails(uid),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Transform.scale(
-                    scale: 0.7,
-                    child: const CircularProgressIndicator(),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                final productos = snapshot.data;
-                if (productos != null && productos.isNotEmpty) {
-                  return Column(
-                    children: productos.map((producto) {
-                      return ExpansionTile(
-                        leading: const Icon(Icons.restaurant),
-                        title: Text("Nombre: ${producto.producto}"),
-                        subtitle: Text("Cantidad: ${producto.cantidad}"),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProductoEditController(
-                                              producto: producto)),
-                                );
-                                setState(() {});
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () async {
-                                eliminarProducto(producto);
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                        children: [
-                          ListTile(
-                            title: Text("Descripcion: ${producto.descripcion}"),
-                            subtitle: Text("Precio: ${producto.precio}"),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  );
-                } else {
-                  return const Text('No se encontraron comidas.');
-                }
-              }
-            },
+          const SearchWidget(),
+          const SizedBox(height: 25),
+          _buildAdsImage(),
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Text(
+              "Products",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildProductsList(),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdsImage() {
+    return Container(
+      margin: const EdgeInsets.only(left: 15, right: 15),
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(15),
+        image: const DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGV8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductsList() {
+    if (products.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    return Column(
+      children: [
+        for (var product in products) _cardProduct(product),
+      ],
+    );
+  }
+
+  Widget _cardProduct(Product product) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadowColor.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Agrega la funcionalidad para el botón flotante aquí.
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PhotoUpload()),
-          );
-          setState(() {});
-        },
-        child: const Icon(Icons.add),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CustomImage(
+            product.productImage,
+            width: 60,
+            height: 60,
+            radius: 10,
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.product,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  product.price.toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductShow(
+                            product: product,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.visibility_rounded),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductUpdate(
+                            product: product,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      ProductController().deleteProduct(product);
+                      //setState(() {});
+                    },
+                    icon: const Icon(Icons.delete_forever),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

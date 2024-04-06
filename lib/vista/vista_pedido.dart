@@ -5,8 +5,8 @@ import 'package:ecosecha/logica/detalle_pago.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class DetallePagoItems extends StatelessWidget {
-  DetallePagoItems();
+class Historial extends StatelessWidget {
+  Historial();
   final uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
@@ -20,7 +20,7 @@ class DetallePagoItems extends StatelessWidget {
         // Add any other app bar customization as needed
       ),
       body: FutureBuilder<List<DetallePago>>(
-        future: getDetallePagoUsuario(uid),
+        future: DetailPaymentController().getDetallePagoUsuario(uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
